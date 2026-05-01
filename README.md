@@ -6,6 +6,11 @@
 
 Custom Home Assistant integration for Toyota Supra Connect telemetry.
 
+This is an independent Supra Connect project by `its-me-prash`. It was initially cleaned out of a fork that contained
+`bimmer_connected` code and fixtures, but it is not intended as a continuation of `bimmer_connected`. The old repository
+was used as historical reference material for the BMW/Supra platform context; the integration code in this repository is
+now a new Home Assistant HACS integration focused on Supra Connect telemetry.
+
 Toyota Supra Connect is powered by BMW ConnectedDrive. Since September 29, 2025 BMW blocks the old third-party MyBMW API flow that powered `bimmer_connected` and Home Assistant's former BMW Connected Drive integration. This repository therefore starts from a clean HACS integration and uses the currently viable telemetry path: a BMW/Supra-compatible MQTT stream payload, typically produced by a CarData/MQTT bridge.
 
 ## Status
@@ -60,4 +65,4 @@ This project keeps the first production path honest: ingest official/bridge tele
 
 ## Attribution
 
-This project was initially cleaned up from a `bimmer_connected`-based repository. The current HACS integration is a new read-only Home Assistant integration and does not vendor or depend on `bimmer_connected`.
+See [ATTRIBUTION.md](ATTRIBUTION.md).
