@@ -1,0 +1,37 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Supra Connect",
+        "description": "Abonniert Supra-Connect-kompatible MQTT-Telemetrie. Standard-Topic: `{topic}`.",
+        "data": {
+          "name": "Name",
+          "topic_prefix": "MQTT-Topic-Präfix"
+        }
+      }
+    },
+    "error": {
+      "empty_topic_prefix": "Gib ein Topic-Präfix ein."
+    },
+    "abort": {
+      "already_configured": "Dieses Topic-Präfix ist bereits eingerichtet."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "dynamic_descriptor": {
+        "name": "{descriptor}"
+      }
+    },
+    "binary_sensor": {
+      "dynamic_descriptor": {
+        "name": "{descriptor}"
+      }
+    },
+    "device_tracker": {
+      "dynamic_descriptor": {
+        "name": "{descriptor}"
+      }
+    }
+  }
+}
