@@ -1,5 +1,9 @@
 # Supra Connect for Home Assistant
 
+<p align="center">
+  <img src="images/logo.png" alt="Toyota Supra Connect logo" width="180">
+</p>
+
 Custom Home Assistant integration for Toyota Supra Connect telemetry.
 
 Toyota Supra Connect is powered by BMW ConnectedDrive. Since September 29, 2025 BMW blocks the old third-party MyBMW API flow that powered `bimmer_connected` and Home Assistant's former BMW Connected Drive integration. This repository therefore starts from a clean HACS integration and uses the currently viable telemetry path: a BMW/Supra-compatible MQTT stream payload, typically produced by a CarData/MQTT bridge.
