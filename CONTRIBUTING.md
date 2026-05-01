@@ -1,14 +1,26 @@
-# Contributing to bimmer_connected
+# Contributing to Supra Connect
 
-Contributions to bimmer_connected are welcome!
+Thanks for helping make Supra Connect useful in Home Assistant.
 
-The process is straight-forward.
+## Local Checks
 
- - Fork the bimmer_connected [git repository](https://github.com/bimmerconnected/bimmer_connected).
- - Write the code for your new feature, change or bugfix.
- - Please make sure that your code passes the checks in `.github/workflows/test.yml`. We currently test against `flake8`, `pylint` and our own `pytest` suite. And please add tests where it makes sense. The more the better.
- - Create a Pull Request against the [**master**](https://github.com/bimmerconnected/bimmer_connected/tree/master) branch of bimmer_connected.
+Run the lightweight syntax check before opening a pull request:
 
-## Feature suggestions
+```bash
+python -m compileall custom_components/supraconnect
+```
 
-If you want to suggest a new feature for bimmer_connected, please open one [here](https://github.com/bimmerconnected/bimmer_connected/discussions/new).
+If you use pre-commit, run:
+
+```bash
+pre-commit run --all-files
+```
+
+## Scope
+
+This integration should stay production-honest:
+
+- Prefer official or user-authorized telemetry paths.
+- Do not reintroduce the blocked MyBMW app API flow as the default path.
+- Add remote commands only when the authentication and transport are verified to work reliably for real Supra Connect users.
+- Keep entity descriptors generic enough to handle different payload shapes, then add explicit metadata hints for known Supra descriptors as they are confirmed.

@@ -1,0 +1,12 @@
+{
+  "domain": "supraconnect",
+  "name": "Supra Connect",
+  "codeowners": ["@its-me-prash"],
+  "config_flow": true,
+  "dependencies": ["mqtt"],
+  "documentation": "https://github.com/its-me-prash/supraconnect",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/its-me-prash/supraconnect/issues",
+  "requirements": [],
+  "version": "1.0.0-alpha.1"
+}
