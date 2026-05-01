@@ -63,6 +63,16 @@ This project keeps the first production path honest: ingest official/bridge tele
 - Add optional known descriptor aliases for nicer entity names.
 - Research Supra Connect portal/device auth separately from the blocked MyBMW app flow.
 
+## Release Channels
+
+This project uses SemVer prerelease channels:
+
+- `v1.0.0-alpha.N`: private/local development with the maintainer's own Supra.
+- `v1.0.0-beta.N`: wider Home Assistant user testing after the maintainer car setup is stable.
+- `v1.0.0`: first public stable release.
+
+See [VERSIONING.md](VERSIONING.md) for the full versioning policy.
+
 ## Attribution
 
 See [ATTRIBUTION.md](ATTRIBUTION.md).
