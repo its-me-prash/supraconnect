@@ -1,7 +1,7 @@
 # Supra Connect for Home Assistant
 
 <p align="center">
-  <img src="images/logo.png" alt="Toyota Supra Connect logo" width="180">
+  <img src="https://raw.githubusercontent.com/its-me-prash/supraconnect/master/images/logo.png" alt="Toyota Supra Connect logo" width="180">
 </p>
 
 Custom Home Assistant integration for Toyota Supra Connect telemetry.
