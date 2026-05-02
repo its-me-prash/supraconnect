@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/its-me-prash/supraconnect/master/images/logo.png" alt="Toyota Supra Connect logo" width="180">
+  <img src="https://raw.githubusercontent.com/its-me-prash/supraconnect/master/custom_components/supraconnect/logo.png" alt="Supra Connect" width="180">
 </p>
 
 # Supra Connect

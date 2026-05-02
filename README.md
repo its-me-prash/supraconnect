@@ -1,40 +1,74 @@
-# Supra Connect for Home Assistant
-
 <p align="center">
-  <img src="https://raw.githubusercontent.com/its-me-prash/supraconnect/master/images/logo.png" alt="Toyota Supra Connect logo" width="180">
+  <img src="https://raw.githubusercontent.com/its-me-prash/supraconnect/master/custom_components/supraconnect/logo.png" alt="Supra Connect" width="180">
 </p>
 
-Custom Home Assistant integration for Toyota Supra Connect telemetry.
+<h1 align="center">Supra Connect</h1>
 
-This is an independent Supra Connect project by `its-me-prash`. It was initially cleaned out of a fork that contained
-`bimmer_connected` code and fixtures, but it is not intended as a continuation of `bimmer_connected`. The old repository
-was used as historical reference material for the BMW/Supra platform context; the integration code in this repository is
-now a new Home Assistant HACS integration focused on Supra Connect telemetry.
+<p align="center">
+  <strong>Home Assistant Integration für Toyota Supra Connect Telemetrie</strong>
+</p>
 
-Toyota Supra Connect is powered by BMW ConnectedDrive. Since September 29, 2025 BMW blocks the old third-party MyBMW API flow that powered `bimmer_connected` and Home Assistant's former BMW Connected Drive integration. This repository therefore starts from a clean HACS integration and uses the currently viable telemetry path: a BMW/Supra-compatible MQTT stream payload, typically produced by a CarData/MQTT bridge.
+<p align="center">
+  <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge" alt="HACS"></a>
+  <a href="https://github.com/its-me-prash/supraconnect/releases"><img src="https://img.shields.io/github/v/release/its-me-prash/supraconnect?include_prereleases&style=for-the-badge" alt="Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Lizenz-Apache%202.0-blue.svg?style=for-the-badge" alt="Lizenz"></a>
+  <a href="https://www.home-assistant.io"><img src="https://img.shields.io/badge/Home%20Assistant-2025.3%2B-blue?style=for-the-badge" alt="Home Assistant"></a>
+  <a href="https://github.com/its-me-prash/supraconnect/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/its-me-prash/supraconnect/validate.yml?branch=master&style=for-the-badge&label=Validate" alt="Validate"></a>
+</p>
 
-## Status
+---
 
-- HACS-ready custom integration.
-- Config flow in the Home Assistant UI.
-- Dynamic vehicle discovery by VIN.
-- Dynamic sensors and binary sensors from incoming descriptor payloads.
-- Device tracker when latitude/longitude telemetry is present.
-- Read-only telemetry first. Remote commands are intentionally not implemented until a reliable official Supra path is verified.
+**Supra Connect** verbindet Home Assistant mit Toyota-Supra-Connect-kompatibler Telemetrie. Die erste Alpha ist bewusst
+read-only und nutzt MQTT/Cardata-artige Payloads, damit reale Supra-Daten lokal getestet werden können, ohne den seit
+2025 blockierten MyBMW-App-API-Weg wieder als Produktionsbasis einzubauen.
 
-## Installation
+> **Alpha-Status:** `v1.0.0-alpha.x` ist für lokale Validierung mit dem eigenen Supra gedacht. Danach folgt `beta` für
+> ausgewählte Home-Assistant-Tester und erst danach `v1.0.0` als stabile öffentliche Version.
 
-1. Add this repository to HACS as a custom repository of type `Integration`.
-2. Install `Supra Connect`.
-3. Restart Home Assistant.
-4. Go to **Settings > Devices & Services > Add Integration > Supra Connect**.
-5. Enter the MQTT topic prefix used by your bridge. The default is `bmw/`, which subscribes to `bmw/#`.
+## Aktueller Stand & ehrliche Limits (v1.0.0-alpha.3)
 
-## MQTT Payloads
+Supra Connect ist eine neue, eigenständige HACS-Integration. Der alte Fork-Kontext wurde als historische Quelle
+aufgeräumt; die aktive Codebasis liegt unter `custom_components/supraconnect`.
 
-The integration accepts JSON payloads on `<prefix><VIN>` or any subtopic below the prefix. The VIN can be supplied either in the topic or in the payload.
+### Was jetzt funktioniert
 
-Example:
+- HACS-kompatible Repository-Struktur mit `hacs.json`
+- Home-Assistant-Config-Flow
+- MQTT-Subscription auf frei konfigurierbare Topic-Präfixe, Standard: `bmw/`
+- VIN-Erkennung aus Payload oder Topic
+- dynamische Sensoren aus eingehenden Telemetrie-Deskriptoren
+- dynamische Binary-Sensoren für boolesche Zustände
+- Device Tracker, sobald Latitude/Longitude-Telemetrie vorhanden ist
+- Logo-Assets für README, HACS-Ansicht und Integration
+
+### Was noch in Arbeit ist
+
+- echte Supra-Descriptor-Mappings mit schöneren Entity-Namen, Units und Device Classes
+- Diagnostics/Repair-Flows für stale MQTT-Daten und ungültige Payloads
+- robuste Tests mit echten, anonymisierten Supra-Payloads
+- optionaler BMW/Supra-CarData-Setup-Guide mit klaren Screenshots
+- direkte Supra-Connect-Auth nur, wenn ein stabiler und supportbarer Weg verifiziert ist
+
+### Bewusste Limits
+
+- keine Remote-Kommandos in Alpha
+- kein Versuch, die blockierte MyBMW-App-API als Standardpfad wiederzubeleben
+- MQTT/Cardata-Bridge oder kompatibler Datenstrom wird vorausgesetzt
+- Payload-Formate können sich in Alpha noch ändern
+
+## Unterstützte Plattformen
+
+```text
+sensor  |  binary_sensor  |  device_tracker
+```
+
+---
+
+## Telemetrie & Entities
+
+Die Integration ist descriptor-first: neue Werte aus deinem Payload werden automatisch als Entities angelegt.
+
+### Beispiel-Payload
 
 ```json
 {
@@ -48,31 +82,90 @@ Example:
 }
 ```
 
-Nested JSON is flattened automatically, so both descriptor-style payloads and normal nested objects work.
+Nested JSON wird automatisch geflattet. VIN kann im Payload oder im MQTT-Topic stehen.
 
-## Why Not Direct Login?
+### MQTT Topic
 
-The old `bimmer_connected` MyBMW/Supra API route is not a good production base anymore. Upstream documents that BMW added app-side security checks and blocked third-party requests. Building the HACS integration around that path would look familiar but fail for real users.
+| Feld | Standard | Beschreibung |
+|---|---:|---|
+| Topic-Präfix | `bmw/` | Die Integration subscribed auf `<prefix>#` |
+| VIN | Payload oder Topic | 17-stellige VIN, z. B. `<prefix><VIN>` |
+| Payload | JSON | `data`-Objekt oder direktes Descriptor-Objekt |
 
-This project keeps the first production path honest: ingest official/bridge telemetry into Home Assistant cleanly, then add direct Supra-specific authentication only after it is proven stable and legally usable.
+---
+
+## Installation
+
+### HACS
+
+1. HACS -> Integrationen -> drei Punkte -> Benutzerdefinierte Repositories
+2. URL: `https://github.com/its-me-prash/supraconnect` -> Kategorie: Integration
+3. **Supra Connect** installieren
+4. Home Assistant neu starten
+5. Einstellungen -> Geräte & Dienste -> Integration hinzufügen -> **Supra Connect**
+
+### Manuell
+
+```bash
+cp -r custom_components/supraconnect ~/.homeassistant/custom_components/
+```
+
+Home Assistant danach neu starten.
+
+---
+
+## Konfiguration
+
+| Feld | Pflicht | Beschreibung |
+|---|---|---|
+| Name | ja | Anzeigename der Integration |
+| MQTT-Topic-Präfix | ja | Präfix deines Supra/BMW-CarData-MQTT-Streams, Standard `bmw/` |
+
+---
+
+## Technischer Hintergrund
+
+Toyota Supra Connect basiert auf BMW ConnectedDrive. Seit dem 29.09.2025 blockiert BMW Drittzugriffe auf den alten
+MyBMW-App-API-Weg, der früher von `bimmer_connected` und ähnlichen Integrationen genutzt wurde. Deshalb startet dieses
+Projekt nicht mit einem alten Login-Flow, sondern mit einem ehrlichen Telemetriepfad über MQTT/Cardata-kompatible Daten.
+
+```text
+custom_components/supraconnect/
+  config_flow.py      -> UI-Setup
+  coordinator.py      -> MQTT ingest, VIN discovery, descriptor flattening
+  sensor.py           -> dynamische Sensoren
+  binary_sensor.py    -> dynamische Binary-Sensoren
+  device_tracker.py   -> GPS-Tracker bei vorhandenen Koordinaten
+  entity.py           -> gemeinsame Entity-Basis
+```
+
+- keine externen Python-Abhängigkeiten
+- Home-Assistant-MQTT-Integration als Transport
+- read-only Alpha für sichere reale Fahrzeugvalidierung
+
+---
 
 ## Roadmap
 
-- Map common Supra descriptors to polished device classes and units.
-- Add diagnostics and repair flows for stale MQTT data.
-- Add optional known descriptor aliases for nicer entity names.
-- Research Supra Connect portal/device auth separately from the blocked MyBMW app flow.
+| Phase | Ziel |
+|---|---|
+| `v1.0.0-alpha.x` | lokale Validierung mit dem eigenen Supra, Payload-Sammlung, Descriptor-Mapping |
+| `v1.0.0-beta.x` | ausgewählte Home-Assistant-Tester, stabilere Entity-Namen, Migrationen |
+| `v1.0.0` | öffentliche stabile HACS-Version |
 
-## Release Channels
+Details: [VERSIONING.md](VERSIONING.md)
 
-This project uses SemVer prerelease channels:
-
-- `v1.0.0-alpha.N`: private/local development with the maintainer's own Supra.
-- `v1.0.0-beta.N`: wider Home Assistant user testing after the maintainer car setup is stable.
-- `v1.0.0`: first public stable release.
-
-See [VERSIONING.md](VERSIONING.md) for the full versioning policy.
+---
 
 ## Attribution
 
-See [ATTRIBUTION.md](ATTRIBUTION.md).
+Dieses Projekt ist ein eigenständiges Community-Projekt von `its-me-prash`. Der ursprüngliche Fork-Kontext diente nur
+als historische Quelle für BMW/Supra-Plattformwissen. Details: [ATTRIBUTION.md](ATTRIBUTION.md)
+
+---
+
+## Lizenz
+
+Apache License 2.0 - [LICENSE](LICENSE)
+
+Dieses Projekt ist nicht mit Toyota, BMW, BMW ConnectedDrive oder Supra Connect offiziell verbunden.
